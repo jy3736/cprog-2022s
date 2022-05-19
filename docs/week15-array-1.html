@@ -1,0 +1,865 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>C++ 基礎入門 8 - 陣列應用 1</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style><link rel="stylesheet" href="dark-theme.css"><link rel="stylesheet"  target="_blank" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github-dark-dimmed.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script></head><body><article id="8b546341-df0a-47a5-ad72-07f2d6b382c0" class="page mono"><header><img class="page-cover-image" src="C++%20%E5%9F%BA%E7%A4%8E%E5%85%A5%E9%96%80%208%20-%20%E9%99%A3%E5%88%97%E6%87%89%E7%94%A8%201%20819f3d23f7754766b3d3369681da2eb2/7.png" style="object-position:center 50%"/><div class="page-header-icon page-header-icon-with-cover"><img class="icon" src="C++%20%E5%9F%BA%E7%A4%8E%E5%85%A5%E9%96%80%208%20-%20%E9%99%A3%E5%88%97%E6%87%89%E7%94%A8%201%20819f3d23f7754766b3d3369681da2eb2/yang-tr-wb.png"/></div><h1 class="page-title"><strong>C++ 基礎入門 8 - 陣列應用 1</strong></h1><link rel="stylesheet" href="dark-theme.css"><link rel="stylesheet"  target="_blank" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/github-dark-dimmed.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script></header><div class="page-body"><h2 id="1ef76a2d-7468-4324-8389-cfabd741e6f7" class="block-color-purple_background">參考資料</h2><figure id="95719279-13fc-497a-bc22-227b75277470"><a  target="_blank" href="https://www.w3schools.com/CPP/cpp_arrays.asp" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">C++ Arrays</div><div class="bookmark-description">Arrays are used to store multiple values in a single variable, instead of declaring separate variables for each value. To declare an array, define the variable type, specify the name of the array followed by square brackets and specify the number of elements it should store: We have now declared a variable that holds an array of four strings.</div></div><div class="bookmark-href"><img src="https://www.w3schools.com/favicon.ico" class="icon bookmark-icon"/>https://www.w3schools.com/CPP/cpp_arrays.asp</div></div><img src="https://www.w3schools.com/images/w3schools_logo_436_2.png" class="bookmark-image"/></a></figure><h2 id="da5ad0f8-dd3f-4b5b-ba99-158d95624b6d" class="block-color-purple_background">課程設計</h2><div id="ea757934-2c4b-4ceb-9967-3fb3f3c33c12" class="column-list"><div id="55e1464f-2dbb-404e-8704-2494a4a10f1e" style="width:12.5%" class="column"><figure id="819f3d23-f775-4766-b3d3-369681da2eb2" class="image"><a href="C++%20%E5%9F%BA%E7%A4%8E%E5%85%A5%E9%96%80%208%20-%20%E9%99%A3%E5%88%97%E6%87%89%E7%94%A8%201%20819f3d23f7754766b3d3369681da2eb2/Untitled.png"><img style="width:144px" src="C++%20%E5%9F%BA%E7%A4%8E%E5%85%A5%E9%96%80%208%20-%20%E9%99%A3%E5%88%97%E6%87%89%E7%94%A8%201%20819f3d23f7754766b3d3369681da2eb2/Untitled.png"/></a></figure></div><div id="0f057892-a343-42af-a402-59f2c459b621" style="width:87.50000000000003%" class="column"><div id="yang-id-001" class="yang-class-001">目 錄：</div>
+<a href="#fb2b94e2-940b-4e42-8c96-1bd5cccfd014" class="yang-class-002">[<strong>課堂練習 1]：一維陣列簡單操作運用</strong></a>
+<a href="#00b5d525-0576-4431-a88b-f148e711968e" class="yang-class-002">[<strong>課堂練習 2]：一維陣列填入特定數列</strong></a>
+<a href="#4260b0b4-1c23-4ab7-87d4-fed7e26032d1" class="yang-class-002">[<strong>課堂練習 3]：計算一維陣列長度 + 使用巨集(Macro)</strong></a>
+<a href="#e49c78c1-8147-4d7f-af5f-c63f4ce365f8" class="yang-class-002">[<strong>課堂練習 4]：亂數與陣列的應用</strong></a>
+</div></div><a href="#yang-id-001" class="yang-class-003">回目錄</a>
+<h3 id="fb2b94e2-940b-4e42-8c96-1bd5cccfd014" class="block-color-teal_background">[<strong>課堂練習 1]：一維陣列簡單操作運用</strong></h3><h3 id="de31c42a-89ce-4bcd-984e-68b9bb8f56bd" class=""><strong>定義一維陣列</strong></h3><pre id="9b308f5b-671c-4078-a9db-6cdba358dd50" class="code code-wrap"><code>int a1[6] = {1, 4, 2, 5, 6, 7};</code></pre><pre id="e29f87c7-a8f9-4e60-aa53-8e01d126e73e" class="code code-wrap"><code>cout&lt;&lt;&quot;a1[0] = &quot;&lt;&lt;a1[0]&lt;&lt;endl;
+cout&lt;&lt;&quot;a1[1] = &quot;&lt;&lt;a1[1]&lt;&lt;endl;
+cout&lt;&lt;&quot;a1[2] = &quot;&lt;&lt;a1[2]&lt;&lt;endl;
+cout&lt;&lt;&quot;a1[3] = &quot;&lt;&lt;a1[3]&lt;&lt;endl;
+cout&lt;&lt;&quot;a1[4] = &quot;&lt;&lt;a1[4]&lt;&lt;endl;
+cout&lt;&lt;&quot;a1[5] = &quot;&lt;&lt;a1[5]&lt;&lt;endl;</code></pre><pre id="265480ff-b131-4817-8f34-4c3bc49d5cc9" class="code code-wrap"><code>a1[0] = 1
+a1[1] = 4
+a1[2] = 2
+a1[3] = 5
+a1[4] = 6
+a1[5] = 7</code></pre><pre id="dee2d682-1a0c-49f1-bbf8-b02ffef82d6b" class="code code-wrap"><code>a1[0] = 6;
+a1[1] = 66;
+a1[2] = 666;
+cout&lt;&lt;&quot;a1[0] = &quot;&lt;&lt;a1[0]&lt;&lt;endl;
+cout&lt;&lt;&quot;a1[1] = &quot;&lt;&lt;a1[1]&lt;&lt;endl;
+cout&lt;&lt;&quot;a1[2] = &quot;&lt;&lt;a1[2]&lt;&lt;endl;</code></pre><pre id="6c9253ba-79ae-4efe-9aa9-3041e6e2203c" class="code code-wrap"><code>a1[0] = 6
+a1[1] = 66
+a1[2] = 666</code></pre><h3 id="b7bc27f0-f1c1-465c-8ca8-b417e449a0d8" class="block-color-yellow"><strong>設計陣列輸出函數</strong></h3><ul id="8b1dac6a-0081-49e2-b6e7-910f218802fa" class="bulleted-list"><li style="list-style-type:disc">d ：陣列</li></ul><ul id="c5c5e719-adc4-4133-a1dd-c689e33927d4" class="bulleted-list"><li style="list-style-type:disc">len ：陣列 d 的長度(幾個元素)</li></ul><pre id="df91fb67-a7ac-4043-b4d6-984b54591648" class="code code-wrap"><code>void dump(int d[], int len) {
+    for(int i=0; i&lt;len; i++) {
+        cout&lt;&lt;setw(4)&lt;&lt;d[i];
+        if ((i+1)%20==0)
+            cout&lt;&lt;endl;
+    }
+    cout&lt;&lt;endl;
+}</code></pre><pre id="871f54e0-0d24-4892-b586-a5f8e306d20d" class="code code-wrap"><code>dump(a1,6);</code></pre><pre id="a77adc27-67c3-4b34-bb5d-77c204dc77da" class="code code-wrap"><code>   6  66 666   5   6   7</code></pre><pre id="184ea38c-0845-4cdf-8f77-3879d752ed49" class="code code-wrap"><code>dump(a1,3);</code></pre><pre id="0bce76d0-d1d8-4883-9d85-442c3e3315dc" class="code code-wrap"><code>   6  66 666</code></pre><h3 id="78542888-d109-43cc-93ed-268b49860967" class="block-color-yellow"><strong>設計將特定數值填入陣列的函數</strong></h3><ul id="9b141857-1ed3-41cd-8b28-dc7afc0039df" class="bulleted-list"><li style="list-style-type:disc">d ：陣列</li></ul><ul id="ff744032-8d68-43b8-9918-c04a69ff48c5" class="bulleted-list"><li style="list-style-type:disc">len ：陣列 d 的長度(幾個元素)</li></ul><ul id="fe635f8a-a9d8-41a1-9e93-cec307fb6b0b" class="bulleted-list"><li style="list-style-type:disc">val ：填入陣列的數值</li></ul><pre id="6967d37c-eafa-431b-a863-27f9d858f652" class="code code-wrap"><code>void fill(int d[], int len, int val) {
+    for(int i=0; i&lt;len; i++)
+        d[i] = val;
+}</code></pre><pre id="22939bda-cc2d-4e87-badc-659e0a89dba5" class="code code-wrap"><code>int a2[10];
+fill(a2,10,88);
+dump(a2,10);</code></pre><pre id="48f14644-745f-44b7-9eb3-316dbae10bc7" class="code code-wrap"><code>  88  88  88  88  88  88  88  88  88  88</code></pre><pre id="d1c5d14f-7939-452c-886e-799191e2e0ff" class="code code-wrap"><code>fill(a2,10,0);
+dump(a2,10);</code></pre><pre id="56dd2ea7-47c3-49cf-832b-1a8c578e8a00" class="code code-wrap"><code>   0   0   0   0   0   0   0   0   0   0</code></pre><h3 id="6e32cf26-c2b5-4198-bc9d-574c186e12b6" class="block-color-yellow"><strong>設計將陣列所有元素初始為 0 的函數</strong></h3><ul id="5076808d-4889-47fc-9740-07f054dd33d0" class="bulleted-list"><li style="list-style-type:disc">d ：陣列</li></ul><ul id="2c1af161-ef5c-475f-9344-db8d37c46c03" class="bulleted-list"><li style="list-style-type:disc">len ：陣列 d 的長度(幾個元素)</li></ul><pre id="cb972499-17f7-4a81-9f60-a250aa8faa5a" class="code code-wrap"><code>void zero(int d[], int len) {
+    fill(d,len,0);
+}</code></pre><pre id="02aa9ca3-d91d-442e-ae2f-a39331c0dee2" class="code code-wrap"><code>int a3[15];
+zero(a3,15);
+dump(a3,15);</code></pre><pre id="35e0e13f-1143-4a54-bfaf-18b324784619" class="code code-wrap"><code>   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0</code></pre><h3 id="183c7dfa-1f40-4634-9efb-a05ebffd71e1" class="block-color-yellow"><strong>設計將陣列所有元素初始為 7 的函數</strong></h3><ul id="55ab25bc-a21c-49ae-b2f0-f952fccec539" class="bulleted-list"><li style="list-style-type:disc">d ：陣列</li></ul><ul id="bc941abc-c194-46ac-826c-0d1228b0bc1e" class="bulleted-list"><li style="list-style-type:disc">len ：陣列 d 的長度(幾個元素)</li></ul><pre id="589fe3f9-a50d-40b9-bc6d-9d623d14eb46" class="code code-wrap"><code>void seven(int d[], int len) {
+    fill(d,len,7);
+}</code></pre><pre id="006f0bc7-c12b-44b9-9982-e7e621ad4e75" class="code code-wrap"><code>int a4[10];
+seven(a4,10);
+dump(a4,10);</code></pre><pre id="ed38cf28-c976-4c0c-996f-74a2623ead8d" class="code code-wrap"><code>   7   7   7   7   7   7   7   7   7   7</code></pre><a href="#yang-id-001" class="yang-class-003">回目錄</a>
+<h3 id="00b5d525-0576-4431-a88b-f148e711968e" class="block-color-teal_background">[<strong>課堂練習 2]：一維陣列填入特定數列</strong></h3><h3 id="a552d1a9-e652-4532-8bce-ffa2bcdd4dda" class="block-color-yellow"><strong>陣列輸出函數</strong></h3><ul id="d2e6df40-d470-4ea1-b9d8-acac3e3735e3" class="bulleted-list"><li style="list-style-type:disc">d ：陣列</li></ul><ul id="d44954f4-9f8f-48eb-9f02-17764a89a464" class="bulleted-list"><li style="list-style-type:disc">len ：陣列 d 的長度(幾個元素)</li></ul><ul id="e5942036-498b-4c91-91ba-4d262f427a39" class="bulleted-list"><li style="list-style-type:disc">每一行最多印20個元素，每一筆資料的寬度為4個字元</li></ul><pre id="b48e6326-54a9-4e57-abed-8471734a9464" class="code code-wrap"><code>void dump(int d[], int len) {
+    for(int i=0; i&lt;len; i++) {
+        cout&lt;&lt;setw(4)&lt;&lt;d[i];
+        if ((i+1)%20==0)
+            cout&lt;&lt;endl;
+    }
+    cout&lt;&lt;endl;
+}</code></pre><h3 id="9d40652d-4944-490b-afaa-2df05fa70d3d" class="block-color-yellow"><strong>將特定數列填入陣列的函數</strong></h3><ul id="5293ab86-6de8-4f85-be35-f312a9e66c87" class="bulleted-list"><li style="list-style-type:disc">d ：陣列</li></ul><ul id="3ca857b3-f978-42f1-8b99-968f8a102642" class="bulleted-list"><li style="list-style-type:disc">len ：陣列 d 的長度(幾個元素)</li></ul><ul id="db93dca8-88be-4d3f-9014-173f026e29ea" class="bulleted-list"><li style="list-style-type:disc">start：數列的起始值</li></ul><ul id="4dcc7bbd-c6b7-4af7-be81-e9ef6d320150" class="bulleted-list"><li style="list-style-type:disc">step ：數列的步階(間距)</li></ul><pre id="77cf4c91-f03e-4f5e-9a7e-0a1158cd0790" class="code code-wrap"><code>void seq(int d[], int len, int start, int step) {
+    for(int i=0; i&lt;len; i++) {
+        d[i] = start;
+        start+=step;
+    }
+}</code></pre><pre id="deb7d1be-e372-4c69-92c2-72bf8d92dc01" class="code code-wrap"><code>int a1[15];
+seq(a1,15,1,1);
+dump(a1,15);</code></pre><pre id="39d1f630-f397-4914-ac67-df1227d3b85f" class="code code-wrap"><code>   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15</code></pre><pre id="77bb3283-dcad-4e41-a6b5-fcfdfcef6c5c" class="code code-wrap"><code>int a1[15];
+seq(a1,15,1,0);
+dump(a1,15);</code></pre><pre id="b30ca987-d717-48fd-8d26-5def36de459f" class="code code-wrap"><code>   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1</code></pre><pre id="c031bf3c-0f71-40c0-91d3-9c9f8e6e4dba" class="code code-wrap"><code>int a1[15];
+seq(a1,15,1,2);
+dump(a1,15);</code></pre><pre id="404ab027-b383-484b-a1fe-1850e992148a" class="code code-wrap"><code>   1   3   5   7   9  11  13  15  17  19  21  23  25  27  29</code></pre><h3 id="4ab1150f-aa70-4d9c-9fdc-ee6aade00e24" class="block-color-yellow"><strong>使用 </strong><code><strong>seq(...)</strong></code><strong> 函數完成 </strong><code><strong>fill(...)</strong></code><strong> 的設計</strong></h3><pre id="df474645-17ba-4040-b14f-6a40aaa5ded7" class="code code-wrap"><code>void fill(int d[], int len, int val) {
+    seq(d,len,val,0);
+}</code></pre><h3 id="36ba2a18-95ba-4db5-ba13-a19138a80973" class=""><strong>使用 </strong><code><strong>seq(...)</strong></code><strong> 函數完成 </strong><code><strong>zero(...)</strong></code><strong> 的設計</strong></h3><pre id="ba380abf-da4d-4304-9084-6f908f025017" class="code code-wrap"><code>void zero(int d[], int len) {
+    seq(d,len,0,0);
+}</code></pre><pre id="f385331a-79c5-460c-91da-be85c2f8870c" class="code code-wrap"><code>int a2[10];
+fill(a2,10,123);
+dump(a2,10);</code></pre><pre id="6bef6712-fd53-4a4f-b5df-84261b932fa8" class="code code-wrap"><code> 123 123 123 123 123 123 123 123 123 123</code></pre><pre id="3a35c7f1-ccbf-4256-8f60-105de69a01ab" class="code code-wrap"><code>int a2[10];
+fill(a2,10,56);
+dump(a2,10);</code></pre><pre id="882b4898-1859-483c-80fa-ed8df1d3ae39" class="code code-wrap"><code>  56  56  56  56  56  56  56  56  56  56</code></pre><pre id="00f6ff52-4888-466c-adee-4b6a9c2a9d38" class="code code-wrap"><code>int a3[10];
+zero(a3,10);
+dump(a3,10);</code></pre><pre id="db833393-d257-4634-8953-c005b841b5b6" class="code code-wrap"><code>   0   0   0   0   0   0   0   0   0   0</code></pre><pre id="230bb47e-cc1e-4346-992f-55fb89de9d8c" class="code code-wrap"><code>int a3[10];
+zero(a3,10);
+fill(a3,5,1);
+dump(a3,10);</code></pre><pre id="1ab6ed21-db09-4540-9099-b01f56862358" class="code code-wrap"><code>   1   1   1   1   1   0   0   0   0   0</code></pre><pre id="2c89ae33-5543-4ee9-901d-d2be8f631531" class="code code-wrap"><code>int a3[10];
+fill(a3,10,1);
+zero(a3,5);
+dump(a3,10);</code></pre><pre id="ef577e60-e766-4ac8-ac2c-147cd9e6bfab" class="code code-wrap"><code>   0   0   0   0   0   1   1   1   1   1</code></pre><pre id="4df5ce88-5f09-4052-affa-1790cecf6c7e" class="code code-wrap"><code>int a4[15];
+seq(a4,15,-9,1);
+zero(a4,10);
+seq(a4,5,5,-1);
+dump(a4,15);</code></pre><pre id="7ee35e66-135b-497c-8afc-5db9c1a9aff0" class="code code-wrap"><code>   5   4   3   2   1   0   0   0   0   0   1   2   3   4   5</code></pre><a href="#yang-id-001" class="yang-class-003">回目錄</a>
+<h3 id="4260b0b4-1c23-4ab7-87d4-fed7e26032d1" class="block-color-teal_background">[<strong>課堂練習 3]：計算一維陣列長度 + 使用巨集(Macro)</strong></h3><h3 id="a1e47431-8593-4b73-b12f-9cfc79515023" class="block-color-yellow"><strong>宣告兩個測試用陣列：a1 及 a2</strong></h3><ul id="5b20411e-96af-466a-801c-c1bc7fd860f8" class="bulleted-list"><li style="list-style-type:disc">a1 ：給定長度及初始值</li></ul><ul id="d480a4d2-e3b2-4fbd-a4f4-4819d608f0a6" class="bulleted-list"><li style="list-style-type:disc">a2 ：沒有設定長度，只給初始值<ul id="77d7edad-dad8-4330-ab8d-50e84104812c" class="bulleted-list"><li style="list-style-type:circle">編譯器會依據<code>初始值</code>設定陣列長度</li></ul></li></ul><pre id="92f400ed-da9f-4cc5-882a-baf8a5013262" class="code code-wrap"><code>int a1[6] = {1, 4, 2, 5, 6, 7};
+int a2[] = {1, 4, 2, 5, 6, 7, 8, 9};</code></pre><h3 id="060e77f1-5177-4b50-8457-6d574f441468" class="block-color-yellow"><strong>陣列輸出函數</strong></h3><ul id="1aef1fad-e39a-409d-a05b-77ab36e54766" class="bulleted-list"><li style="list-style-type:disc">d ：陣列</li></ul><ul id="4502144b-d3ab-40fe-9d66-c4a3e65a6999" class="bulleted-list"><li style="list-style-type:disc">len ：陣列 d 的長度(幾個元素)</li></ul><ul id="afe1ec67-c00d-4704-874c-6c5d28a27f90" class="bulleted-list"><li style="list-style-type:disc">每一行最多印20個元素，每一筆資料的寬度為4個字元</li></ul><pre id="5090637d-3497-4703-834f-4fffb28efb80" class="code code-wrap"><code>void dump(int d[], int len) {
+    for(int i=0; i&lt;len; i++) {
+        cout&lt;&lt;setw(4)&lt;&lt;d[i];
+        if ((i+1)%20==0)
+            cout&lt;&lt;endl;
+    }
+    cout&lt;&lt;endl;
+}</code></pre><h3 id="6101a359-fbfe-4bce-be75-a4ec275e82e2" class="block-color-yellow"><strong>使用 </strong><code><strong>sizeof</strong></code><strong> 計算陣列長度</strong></h3><p id="47d7f5e0-d75e-4c54-bb16-e041bdfdbfbe" class="">
+</p><ul id="2d097f01-8202-4406-bc45-3f5671b807ce" class="bulleted-list"><li style="list-style-type:disc"><code>sizeof</code> 的單位為位元組(bytes)</li></ul><ul id="8fe5e8f3-b477-447d-9d81-e9fd1aa15537" class="bulleted-list"><li style="list-style-type:disc"><code>sizeof(a1)</code> 回傳a1陣列使用幾個位元組數</li></ul><ul id="e56ce0ac-7806-4b35-aa75-5b123fd94203" class="bulleted-list"><li style="list-style-type:disc"><code>sizeof(int)</code> 回傳1個整數使用幾個位元組</li></ul><ul id="b31495db-82c1-41fe-abae-e770ef2037af" class="bulleted-list"><li style="list-style-type:disc"><code>sizeof(a1)/sizeof(int)</code> 計算<code>a1陣列</code>有幾個<code>整數</code>元素</li></ul><pre id="a87f2353-293d-4016-87fd-7b306e337525" class="code code-wrap"><code>dump(a1,6);
+dump(a2,8);
+
+cout&lt;&lt;sizeof(a1)/sizeof(int)&lt;&lt;endl;
+cout&lt;&lt;sizeof(a2)/sizeof(int)&lt;&lt;endl;
+int a1_len = sizeof(a1)/sizeof(int);
+int a2_len = sizeof(a2)/sizeof(int);
+
+dump(a1,a1_len);
+dump(a2,a2_len);</code></pre><pre id="29fc7e0d-6197-4a05-8a29-649acde1ab8b" class="code code-wrap"><code>   1   4   2   5   6   7
+   1   4   2   5   6   7   8   9
+6
+8
+   1   4   2   5   6   7
+   1   4   2   5   6   7   8   9</code></pre><pre id="5fea1b08-a906-420f-98db-885f82d46dce" class="code code-wrap"><code>int a3[] = {1,4,3,6,7,8,9,0,2};
+dump(a3,sizeof(a3)/sizeof(int));</code></pre><pre id="ee56dcaa-6faf-4f7a-a725-0a639afa745f" class="code code-wrap"><code>   1   4   3   6   7   8   9   0   2</code></pre><h3 id="113b7a54-60cd-42cd-85c0-d008414955ce" class="block-color-yellow"><strong>用巨集簡化函數的呼叫</strong></h3><ul id="3f436271-eae1-4f9b-b077-a265195e4b29" class="bulleted-list"><li style="list-style-type:disc">使用 <code>#define</code> 定義巨集<ul id="f464df4d-24d1-4c98-93db-7db1c20d9417" class="bulleted-list"><li style="list-style-type:circle"><code>#define M_dump(a) dump(a,sizeof(a)/sizeof(int))</code></li></ul></li></ul><ul id="4209c906-732f-49fb-aa14-fefd1d4abfee" class="bulleted-list"><li style="list-style-type:disc">M_dump(...) 巨集使用範例<ul id="08c13176-7d60-423f-aaa2-038c5cfa22e7" class="bulleted-list"><li style="list-style-type:circle">M_dump(x)<ul id="78dad2bc-b4fd-490b-aa88-0d7c8dca3fb8" class="bulleted-list"><li style="list-style-type:square">巨集展開成：<code>dump(x,sizeof(x)/sizeof(int))</code></li></ul></li></ul><ul id="14111605-6111-4132-8a84-21e2b9c4bf6f" class="bulleted-list"><li style="list-style-type:circle">M_dump(a1)<ul id="479bf1cd-1b82-496b-a5d5-cf4f0d3c026d" class="bulleted-list"><li style="list-style-type:square">巨集展開成：<code>dump(a1,sizeof(a1)/sizeof(int))</code></li></ul></li></ul></li></ul><pre id="d61e6fa9-2d10-48c6-b7e1-c98d34c59985" class="code code-wrap"><code>#define M_dump(a) dump(a,sizeof(a)/sizeof(int))
+
+int a4[] = {3,4,5,3,2,4,5,6,7,8,9};
+int a5[] = {5,5,5,5,5,5,5};
+int a6[] = {1,2,3,4,5,6};
+
+M_dump(a4);
+M_dump(a5);
+M_dump(a6);</code></pre><pre id="3ee6f78b-27da-4d59-a6c7-639714196065" class="code code-wrap"><code>   3   4   5   3   2   4   5   6   7   8   9
+   5   5   5   5   5   5   5
+   1   2   3   4   5   6</code></pre><a href="#yang-id-001" class="yang-class-003">回目錄</a>
+<h3 id="e49c78c1-8147-4d7f-af5f-c63f4ce365f8" class="block-color-teal_background">[<strong>課堂練習 4]：亂數與陣列的應用</strong></h3><h3 id="97d3947a-0b42-469e-a3b9-86a32219528c" class="block-color-yellow"><strong>陣列輸出函數</strong></h3><ul id="47d94d2a-989a-48a4-8ad7-2b5d53c6bb15" class="bulleted-list"><li style="list-style-type:disc">d ：陣列</li></ul><ul id="af85b12c-e94a-41e7-a478-3f1f36ca9cc9" class="bulleted-list"><li style="list-style-type:disc">len ：陣列 d 的長度(幾個元素)</li></ul><ul id="89b6d6bd-ef55-4f9b-a1f1-542394eadfff" class="bulleted-list"><li style="list-style-type:disc">每一行最多印20個元素，每一筆資料的寬度為4個字元</li></ul><pre id="0878959b-1f64-47ed-96d5-ba022ae36603" class="code code-wrap"><code>void dump(int d[], int len) {
+    for(int i=0; i&lt;len; i++) {
+        cout&lt;&lt;setw(4)&lt;&lt;d[i];
+        if ((i+1)%20==0)
+            cout&lt;&lt;endl;
+    }
+    cout&lt;&lt;endl;
+}</code></pre><h3 id="5fc40976-3f83-439f-a04d-5cd747390342" class="block-color-yellow"><strong>產生5個隨機亂數</strong></h3><ul id="3679c2fe-03f6-449c-a3aa-7222e53f4b9f" class="bulleted-list"><li style="list-style-type:disc">rand() 回傳介於<code>0</code>到<code>RAND_MAX</code>的隨機亂數</li></ul><pre id="11ef4145-27d8-4c2c-9ffe-aaa8444550ca" class="code code-wrap"><code>#include &lt;random&gt;void test_rand() {
+    cout&lt;&lt;&quot;RAND_MAX = &quot;&lt;&lt;RAND_MAX&lt;&lt;endl;
+    for(int i=0; i&lt;5; i++)
+        cout&lt;&lt;rand()&lt;&lt;&quot; &quot;;
+    cout&lt;&lt;endl;
+}
+
+test_rand();</code></pre><pre id="ef969bda-ed5b-4580-a480-a88be8047858" class="code code-wrap"><code>RAND_MAX = 2147483647
+1976753258 634285244 1374191183 75828736 518006743
+</code></pre><h3 id="7884471a-ca7a-4621-b88b-ded3f88c772c" class="block-color-yellow"><strong>設計一函數回傳</strong><code><strong>1 ~ 6</strong></code><strong>的隨機亂數，模擬擲骰子的動作。</strong></h3><pre id="8e6dde2b-f0ac-4364-9260-516464efefff" class="code code-wrap"><code>int dice() {
+    return rand()%6+1;
+}</code></pre><pre id="d0db5775-ef19-46a3-9697-2e1fd01f2aac" class="code code-wrap"><code>cout&lt;&lt;dice()&lt;&lt;endl;
+cout&lt;&lt;dice()&lt;&lt;endl;
+cout&lt;&lt;dice()&lt;&lt;endl;</code></pre><pre id="b8d3597f-5f0a-42f2-9e6a-a39ccc812145" class="code code-wrap"><code>4
+1
+3
+</code></pre><h3 id="03ae37e8-eb12-4f5f-a4f9-e5eb801e23e9" class="block-color-yellow"><strong>模擬擲骰子 n 次的結果。</strong></h3><pre id="46738ef1-9f45-43eb-a9f2-07d5f3b8c115" class="code code-wrap"><code>void test_dice(int n) {
+    for(int i=0; i&lt;n; i++) {
+        cout&lt;&lt;left&lt;&lt;setw(4)&lt;&lt;dice();
+        if ((i+1)%20==0)
+            cout&lt;&lt;endl;
+    }
+    cout&lt;&lt;endl;
+}
+
+test_dice(100);</code></pre><pre id="0ccd93ff-5507-4e4f-a3c4-713c5ac40a57" class="code code-wrap"><code>4   1   6   3   2   4   5   4   6   5   4   2   5   3   5   5   4   1   1   1
+6   4   4   2   5   3   5   2   1   6   6   6   3   2   1   1   4   4   4   1
+2   3   3   1   3   3   2   5   5   2   3   2   5   6   2   4   6   5   3   5
+1   1   2   2   3   5   1   2   5   6   3   5   2   6   1   2   3   4   5   3
+5   3   3   6   3   1   5   3   4   6   6   3   1   1   5   6   5   2   6   5</code></pre><h3 id="b306d0df-1631-4a4d-8fe5-75911e9e5968" class="block-color-yellow"><strong>設計一函數模擬擲骰子 </strong><code><strong>len</strong></code><strong> 次，並將結果存放在 </strong><code><strong>rn</strong></code><strong> 陣列。</strong></h3><pre id="144ed519-63ac-4596-bfc4-e16bb2b736a0" class="code code-wrap"><code>void roll_dice(int rn[], int len) {
+    for(int i=0; i&lt;len; i++)
+        rn[i] = dice();
+}</code></pre><pre id="2d074744-c63f-49f4-ba4b-39247ad7540a" class="code code-wrap"><code>const int LEN = 100;
+int rd[LEN];
+
+roll_dice(rd,LEN);
+dump(rd,LEN);</code></pre><pre id="948a0efc-dbfd-4b8e-83b6-a2ab14cfc8a8" class="code code-wrap"><code>3   2   6   3   3   5   1   3   6   1   3   6   1   5   6   3   6   4   6   1
+1   1   6   1   6   6   4   5   3   4   1   3   3   6   6   6   4   4   2   1
+5   4   6   5   6   4   6   5   1   3   3   5   1   3   5   6   2   2   5   2
+4   5   3   6   4   6   3   6   3   4   6   5   6   4   4   5   5   1   4   5
+3   4   4   4   6   6   1   6   6   3   5   3   1   5   6   3   4   3   6   5
+</code></pre><h3 id="1e8bdfa1-ae99-4914-8b3a-02b3564fa4e2" class="block-color-yellow"><strong>設計一函數分析擲骰子結果，並將分析結果存放在 </strong><code><strong>cnt</strong></code><strong> 陣列。</strong></h3><ul id="97d4a8b2-28a8-47aa-8987-e96273b5b8e7" class="bulleted-list"><li style="list-style-type:disc">rn ： 模擬擲骰子 <code>len</code> 次的結果</li></ul><ul id="84675d0f-5317-4f20-b4b0-b725d885321b" class="bulleted-list"><li style="list-style-type:disc">len： 模擬擲骰子的次數</li></ul><ul id="51904c2f-2d96-46c1-afc1-6df85219a7c3" class="bulleted-list"><li style="list-style-type:disc">cnt： 存放分析結果的陣列<ul id="788ca3fd-2071-4926-8bc3-083294aae024" class="bulleted-list"><li style="list-style-type:circle">cnt[0]：模擬次數</li></ul><ul id="72e4d4fe-258f-45b1-9011-d7235fefaa90" class="bulleted-list"><li style="list-style-type:circle">cnt[1] ~ cnt[6]：依序存放<code>1 ~ 6</code>出現的次數</li></ul></li></ul><pre id="6f38c6ce-0d23-4cd1-bb3a-a6ba1d249c25" class="code code-wrap"><code>void analysis(int rn[], int len, int cnt[]) {
+    for(int i=0; i&lt;7; i++)
+        cnt[i] = 0;
+    cnt[0] = len;
+    for(int i=0; i&lt;len; i++)
+        cnt[rn[i]]++;
+}</code></pre><pre id="1668f7a3-c575-4376-bd3c-8fe62018c751" class="code code-wrap"><code>int result[7];
+int dat[] = {1,2,2,3,3,3,4,4,4,4,5,5,5,5,5,6,6,6,6,6,6};
+
+analysis(dat,sizeof(dat)/sizeof(int),result);
+dump(result,7);</code></pre><pre id="8edf578d-fb2c-4cfc-8d85-4afe6a528eca" class="code code-wrap"><code>21  1   2   3   4   5   6
+</code></pre><pre id="94fced68-9417-4e39-b74f-39e70b253366" class="code code-wrap"><code>const int LEN = 100;
+int rd[LEN];
+int cd[7];
+
+roll_dice(rd,LEN);
+analysis(rd,LEN,cd);
+dump(rd,LEN);
+dump(cd,7);</code></pre><pre id="065b996e-f1ff-4001-9ac7-d64fb0d03583" class="code code-wrap"><code>2   2   5   5   1   6   1   5   1   5   6   6   4   2   4   6   6   3   4   1
+5   5   3   5   1   5   2   6   2   1   3   3   3   1   2   3   1   6   5   5
+5   2   4   6   3   1   5   6   2   6   1   4   2   1   3   3   5   2   6   6
+3   2   2   3   6   1   5   4   1   1   2   3   2   3   6   2   2   2   1   3
+5   5   6   1   5   2   1   3   4   6   6   4   1   6   6   6   6   2   4   4
+
+100 18  19  15  10  17  21</code></pre><p id="ae46f196-8734-4600-9670-d99a483e9d03" class="block-color-yellow">
+</p><p id="3f480d3c-ed87-4c39-a4cb-19de30e748d6" class="">
+</p><figure id="6edaa3f2-1413-4865-9580-159318105012" class="image"><a href="C++%20%E5%9F%BA%E7%A4%8E%E5%85%A5%E9%96%80%208%20-%20%E9%99%A3%E5%88%97%E6%87%89%E7%94%A8%201%20819f3d23f7754766b3d3369681da2eb2/%E5%9C%96%E7%89%873.png"><img style="width:1322px" src="C++%20%E5%9F%BA%E7%A4%8E%E5%85%A5%E9%96%80%208%20-%20%E9%99%A3%E5%88%97%E6%87%89%E7%94%A8%201%20819f3d23f7754766b3d3369681da2eb2/%E5%9C%96%E7%89%873.png"/></a></figure><p id="7c9bfdbc-60fb-4516-b9c8-b75b355ea83d" class="">
+</p></div></article>
+<script>hljs.highlightAll();</script>
+</body></html>
